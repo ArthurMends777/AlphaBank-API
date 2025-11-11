@@ -1,0 +1,17 @@
+# Server Configuration
+HOST=127.0.0.1
+PORT=8080
+
+# Database Configuration - MySQL
+DATABASE_URL=mysql://root:sua_senha@localhost:3306/alpha_bank
+
+# JWT Configuration
+JWT_SECRET=
+JWT_EXPIRATION=86400
+
+# CORS Configuration
+CORS_ORIGIN=http://localhost:3000
+
+# Log Level
+RUST_LOG=info
+
