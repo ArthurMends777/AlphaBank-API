@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "alpha-bank-api-collection",
 		"name": "Alpha Bank API",
-		"description": "API completa do Alpha Bank - Sistema de Controle Financeiro",
+		"description": "API Alpha Bank - Sistema de Controle Financeiro Pessoal \\n\\nEsta coleção Postman documenta a API RESTful do Alpha Bank, um sistema de controle financeiro pessoal. A API permite que os usuários gerenciem suas finanças, incluindo autenticação, perfil de usuário, transações financeiras, categorias, metas financeiras, transações recorrentes e notificações. \\n\\n## Estrutura da API \\n\\nA API é organizada em vários endpoints que cobrem diferentes funcionalidades do sistema. Cada endpoint é descrito com seus métodos HTTP suportados, parâmetros necessários e exemplos de solicitações e respostas. \\n\\n## Autenticação \\n\\nA API utiliza tokens JWT para autenticação. Os usuários devem se registrar e fazer login para obter um token, que deve ser incluído no cabeçalho `Authorization` das solicitações subsequentes. \\n\\n## Endpoints Principais \\n\\n- **Autenticação**: Registro, login, recuperação e alteração de senha. \\n- **Perfil do Usuário**: Obtenção e atualização das informações do perfil do usuário. \\n- **Transações**: Criação, leitura, atualização",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"auth": {
