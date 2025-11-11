@@ -1,22 +1,22 @@
-# 📚 Alpha Bank API - Documentação Completa
+# 📚 Documentação da API Alpha Bank
 
 ## 🔐 Autenticação
 
-Todas as rotas protegidas requerem o header:
+Todas as rotas protegidas exigem o envio do seguinte cabeçalho (Header):
 ```
 Authorization: Bearer {seu_token_jwt}
 ```
 
 ---
 
-## 📍 Endpoints
+## 📍 Endpoints da API
 
-### 🔓 Públicos (Sem Autenticação)
+### 🔓 Rotas Públicas (Sem Autenticação)
 
-#### 1. Registrar Usuário
+#### 1. Registro de Usuário
 **POST** `/api/auth/register`
 
-**Body:**
+**Corpo da Requisição (Body):**
 ```json
 {
   "full_name": "João da Silva",
@@ -28,7 +28,7 @@ Authorization: Bearer {seu_token_jwt}
 }
 ```
 
-**Resposta (201):**
+**Resposta (201 Created):**
 ```json
 {
   "token": "eyJhbGc...",
@@ -46,7 +46,7 @@ Authorization: Bearer {seu_token_jwt}
 #### 2. Login
 **POST** `/api/auth/login`
 
-**Body:**
+**Corpo da Requisição (Body):**
 ```json
 {
   "email": "joao@example.com",
@@ -54,7 +54,7 @@ Authorization: Bearer {seu_token_jwt}
 }
 ```
 
-**Resposta (200):**
+**Resposta (200 OK):**
 ```json
 {
   "token": "eyJhbGc...",
@@ -64,33 +64,33 @@ Authorization: Bearer {seu_token_jwt}
 
 ---
 
-#### 3. Recuperar Senha
+#### 3. Recuperação de Senha
 **POST** `/api/auth/forgot-password`
 
-**Body:**
+**Corpo da Requisição (Body):**
 ```json
 {
   "email": "joao@example.com"
 }
 ```
 
-**Resposta (200):**
+**Resposta (200 OK):**
 ```json
 {
-  "message": "If the email exists, a recovery link will be sent"
+  "message": "Se o e-mail estiver cadastrado, um link de recuperação será enviado."
 }
 ```
 
 ---
 
-### 🔒 Protegidos (Requerem Autenticação)
+### 🔒 Rotas Protegidas (Requerem Autenticação)
 
-## 👤 Perfil do Usuário
+## 👤 Gerenciamento de Perfil
 
-#### 4. Obter Perfil
+#### 4. Obter Detalhes do Perfil
 **GET** `/api/me`
 
-**Resposta (200):**
+**Resposta (200 OK):**
 ```json
 {
   "id": "uuid",
@@ -108,7 +108,7 @@ Authorization: Bearer {seu_token_jwt}
 #### 5. Atualizar Perfil
 **PUT** `/api/me`
 
-**Body (todos os campos são opcionais):**
+**Corpo da Requisição (Body - todos os campos são opcionais):**
 ```json
 {
   "full_name": "João Silva Santos",
@@ -118,10 +118,10 @@ Authorization: Bearer {seu_token_jwt}
 }
 ```
 
-**Resposta (200):**
+**Resposta (200 OK):**
 ```json
 {
-  "message": "Profile updated successfully"
+  "message": "Perfil atualizado com sucesso."
 }
 ```
 
@@ -130,7 +130,7 @@ Authorization: Bearer {seu_token_jwt}
 #### 6. Alterar Senha
 **POST** `/api/auth/change-password`
 
-**Body:**
+**Corpo da Requisição (Body):**
 ```json
 {
   "old_password": "senha123",
@@ -138,21 +138,21 @@ Authorization: Bearer {seu_token_jwt}
 }
 ```
 
-**Resposta (200):**
+**Resposta (200 OK):**
 ```json
 {
-  "message": "Password changed successfully"
+  "message": "Senha alterada com sucesso."
 }
 ```
 
 ---
 
-## 💰 Transações
+## 💰 Transações Financeiras
 
 #### 7. Listar Transações
 **GET** `/api/transactions`
 
-**Resposta (200):**
+**Resposta (200 OK):**
 ```json
 [
   {
@@ -175,14 +175,14 @@ Authorization: Bearer {seu_token_jwt}
 #### 8. Buscar Transação por ID
 **GET** `/api/transactions/{id}`
 
-**Resposta (200):** Objeto de transação
+**Resposta (200 OK):** Retorna o objeto da transação.
 
 ---
 
-#### 9. Criar Transação
+#### 9. Criar Nova Transação
 **POST** `/api/transactions`
 
-**Body:**
+**Corpo da Requisição (Body):**
 ```json
 {
   "description": "Compra no supermercado",
@@ -193,14 +193,14 @@ Authorization: Bearer {seu_token_jwt}
 }
 ```
 
-**Resposta (201):** Objeto da transação criada
+**Resposta (201 Created):** Retorna o objeto da transação criada.
 
 ---
 
 #### 10. Atualizar Transação
 **PUT** `/api/transactions/{id}`
 
-**Body (todos os campos opcionais):**
+**Corpo da Requisição (Body - todos os campos opcionais):**
 ```json
 {
   "description": "Compra no mercado (atualizado)",
@@ -210,22 +210,22 @@ Authorization: Bearer {seu_token_jwt}
 }
 ```
 
-**Resposta (200):**
+**Resposta (200 OK):**
 ```json
 {
-  "message": "Transaction updated successfully"
+  "message": "Transação atualizada com sucesso."
 }
 ```
 
 ---
 
-#### 11. Deletar Transação
+#### 11. Excluir Transação
 **DELETE** `/api/transactions/{id}`
 
-**Resposta (200):**
+**Resposta (200 OK):**
 ```json
 {
-  "message": "Transaction deleted successfully"
+  "message": "Transação excluída com sucesso."
 }
 ```
 
@@ -236,7 +236,7 @@ Authorization: Bearer {seu_token_jwt}
 #### 12. Listar Categorias
 **GET** `/api/categories`
 
-**Resposta (200):**
+**Resposta (200 OK):**
 ```json
 [
   {
@@ -254,10 +254,10 @@ Authorization: Bearer {seu_token_jwt}
 
 ---
 
-#### 13. Criar Categoria
+#### 13. Criar Nova Categoria
 **POST** `/api/categories`
 
-**Body:**
+**Corpo da Requisição (Body):**
 ```json
 {
   "name": "Academia",
@@ -267,14 +267,14 @@ Authorization: Bearer {seu_token_jwt}
 }
 ```
 
-**Resposta (201):** Objeto da categoria criada
+**Resposta (201 Created):** Retorna o objeto da categoria criada.
 
 ---
 
 #### 14. Atualizar Categoria
 **PUT** `/api/categories/{id}`
 
-**Body (campos opcionais):**
+**Corpo da Requisição (Body - campos opcionais):**
 ```json
 {
   "name": "Fitness",
@@ -283,22 +283,22 @@ Authorization: Bearer {seu_token_jwt}
 }
 ```
 
-**Resposta (200):**
+**Resposta (200 OK):**
 ```json
 {
-  "message": "Category updated successfully"
+  "message": "Categoria atualizada com sucesso."
 }
 ```
 
 ---
 
-#### 15. Deletar Categoria
+#### 15. Excluir Categoria
 **DELETE** `/api/categories/{id}`
 
-**Resposta (200):**
+**Resposta (200 OK):**
 ```json
 {
-  "message": "Category deleted successfully"
+  "message": "Categoria excluída com sucesso."
 }
 ```
 
@@ -309,7 +309,7 @@ Authorization: Bearer {seu_token_jwt}
 #### 16. Listar Metas
 **GET** `/api/goals`
 
-**Resposta (200):**
+**Resposta (200 OK):**
 ```json
 [
   {
@@ -331,14 +331,14 @@ Authorization: Bearer {seu_token_jwt}
 #### 17. Buscar Meta por ID
 **GET** `/api/goals/{id}`
 
-**Resposta (200):** Objeto da meta
+**Resposta (200 OK):** Retorna o objeto da meta.
 
 ---
 
-#### 18. Criar Meta
+#### 18. Criar Nova Meta
 **POST** `/api/goals`
 
-**Body:**
+**Corpo da Requisição (Body):**
 ```json
 {
   "name": "Comprar carro",
@@ -348,14 +348,14 @@ Authorization: Bearer {seu_token_jwt}
 }
 ```
 
-**Resposta (201):** Objeto da meta criada
+**Resposta (201 Created):** Retorna o objeto da meta criada.
 
 ---
 
 #### 19. Atualizar Meta
 **PUT** `/api/goals/{id}`
 
-**Body (campos opcionais):**
+**Corpo da Requisição (Body - campos opcionais):**
 ```json
 {
   "name": "Comprar carro novo",
@@ -364,10 +364,10 @@ Authorization: Bearer {seu_token_jwt}
 }
 ```
 
-**Resposta (200):**
+**Resposta (200 OK):**
 ```json
 {
-  "message": "Goal updated successfully"
+  "message": "Meta atualizada com sucesso."
 }
 ```
 
@@ -376,40 +376,40 @@ Authorization: Bearer {seu_token_jwt}
 #### 20. Adicionar Progresso à Meta
 **POST** `/api/goals/{id}/progress`
 
-**Body:**
+**Corpo da Requisição (Body):**
 ```json
 {
   "amount": 500.00
 }
 ```
 
-**Resposta (200):**
+**Resposta (200 OK):**
 ```json
 {
-  "message": "Progress added successfully"
+  "message": "Progresso adicionado com sucesso."
 }
 ```
 
 ---
 
-#### 21. Deletar Meta
+#### 21. Excluir Meta
 **DELETE** `/api/goals/{id}`
 
-**Resposta (200):**
+**Resposta (200 OK):**
 ```json
 {
-  "message": "Goal deleted successfully"
+  "message": "Meta excluída com sucesso."
 }
 ```
 
 ---
 
-## 🔄 Despesas Recorrentes
+## 🔄 Transações Recorrentes
 
 #### 22. Listar Recorrências
 **GET** `/api/recurring`
 
-**Resposta (200):**
+**Resposta (200 OK):**
 ```json
 [
   {
@@ -430,10 +430,10 @@ Authorization: Bearer {seu_token_jwt}
 
 ---
 
-#### 23. Criar Recorrência
+#### 23. Criar Nova Recorrência
 **POST** `/api/recurring`
 
-**Body:**
+**Corpo da Requisição (Body):**
 ```json
 {
   "description": "Spotify Premium",
@@ -446,14 +446,14 @@ Authorization: Bearer {seu_token_jwt}
 
 **Frequências válidas:** `daily`, `weekly`, `monthly`, `yearly`
 
-**Resposta (201):** Objeto da recorrência criada
+**Resposta (201 Created):** Retorna o objeto da recorrência criada.
 
 ---
 
 #### 24. Atualizar Recorrência
 **PUT** `/api/recurring/{id}`
 
-**Body (campos opcionais):**
+**Corpo da Requisição (Body - campos opcionais):**
 ```json
 {
   "description": "Spotify Family",
@@ -462,22 +462,22 @@ Authorization: Bearer {seu_token_jwt}
 }
 ```
 
-**Resposta (200):**
+**Resposta (200 OK):**
 ```json
 {
-  "message": "Recurring transaction updated successfully"
+  "message": "Transação recorrente atualizada com sucesso."
 }
 ```
 
 ---
 
-#### 25. Deletar Recorrência
+#### 25. Excluir Recorrência
 **DELETE** `/api/recurring/{id}`
 
-**Resposta (200):**
+**Resposta (200 OK):**
 ```json
 {
-  "message": "Recurring transaction deleted successfully"
+  "message": "Transação recorrente excluída com sucesso."
 }
 ```
 
@@ -486,13 +486,66 @@ Authorization: Bearer {seu_token_jwt}
 #### 26. Gerar Transações Pendentes
 **POST** `/api/recurring/generate`
 
-Gera automaticamente transações de todas as recorrências ativas que estão pendentes.
+Esta rota gera automaticamente transações para todas as recorrências ativas que estão pendentes.
 
-**Resposta (200):**
+**Resposta (200 OK):**
 ```json
 {
-  "message": "3 transactions generated",
+  "message": "3 transações geradas",
   "count": 3
+}
+```
+
+---
+
+## 🏦 Conta Bancária
+
+#### 27. Obter Saldo
+**GET** `/api/account/balance`
+
+**Resposta (200 OK):**
+```json
+{
+  "balance": 15000.00
+}
+```
+
+---
+
+#### 28. Realizar Depósito
+**POST** `/api/account/deposit`
+
+**Corpo da Requisição (Body):**
+```json
+{
+  "amount": 1000.00
+}
+```
+
+**Resposta (200 OK):**
+```json
+{
+  "message": "Depósito realizado com sucesso."
+}
+```
+
+---
+
+#### 29. Realizar Transferência
+**POST** `/api/account/transfer`
+
+**Corpo da Requisição (Body):**
+```json
+{
+  "recipient_email": "destino@example.com",
+  "amount": 500.00
+}
+```
+
+**Resposta (200 OK):**
+```json
+{
+  "message": "Transferência realizada com sucesso."
 }
 ```
 
@@ -500,18 +553,16 @@ Gera automaticamente transações de todas as recorrências ativas que estão pe
 
 ## 🔔 Notificações
 
-#### 27. Listar Notificações
+#### 30. Listar Notificações
 **GET** `/api/notifications`
 
-**Resposta (200):**
+**Resposta (200 OK):**
 ```json
 [
   {
     "id": "uuid",
     "user_id": "uuid",
-    "title": "Meta atingida!",
-    "message": "Você completou sua meta de viagem",
-    "notification_type": "success",
+    "message": "Sua meta 'Viagem' atingiu 50% do progresso!",
     "read": false,
     "created_at": "2025-01-20T10:00:00Z"
   }
@@ -520,141 +571,87 @@ Gera automaticamente transações de todas as recorrências ativas que estão pe
 
 ---
 
-#### 28. Criar Notificação
-**POST** `/api/notifications`
-
-**Body:**
-```json
-{
-  "title": "Lembrete",
-  "message": "Pagar conta de luz",
-  "notification_type": "warning"
-}
-```
-
-**Tipos válidos:** `info`, `success`, `warning`, `error`
-
-**Resposta (201):**
-```json
-{
-  "id": "uuid",
-  "message": "Notification created"
-}
-```
-
----
-
-#### 29. Marcar como Lida
+#### 31. Marcar Notificação como Lida
 **PUT** `/api/notifications/{id}/read`
 
-**Resposta (200):**
+**Resposta (200 OK):**
 ```json
 {
-  "message": "Notification marked as read"
+  "message": "Notificação marcada como lida."
 }
 ```
 
 ---
 
-#### 30. Deletar Notificação
-**DELETE** `/api/notifications/{id}`
+#### 32. Obter Contagem de Não Lidas
+**GET** `/api/notifications/unread_count`
 
-**Resposta (200):**
+**Resposta (200 OK):**
 ```json
 {
-  "message": "Notification deleted"
+  "count": 5
 }
 ```
 
 ---
 
-## 🏥 Health Check
+## 📊 Estatísticas
 
-#### 31. Verificar Status
-**GET** `/health`
+#### 33. Obter Estatísticas Mensais
+**GET** `/api/stats/monthly`
 
-**Resposta (200):** `OK`
-
----
-
-## 📊 Resumo de Endpoints
-
-| Método | Endpoint | Descrição | Auth |
-|--------|----------|-----------|------|
-| POST | `/api/auth/register` | Registrar usuário | ❌ |
-| POST | `/api/auth/login` | Login | ❌ |
-| POST | `/api/auth/forgot-password` | Recuperar senha | ❌ |
-| GET | `/api/me` | Obter perfil | ✅ |
-| PUT | `/api/me` | Atualizar perfil | ✅ |
-| POST | `/api/auth/change-password` | Alterar senha | ✅ |
-| GET | `/api/transactions` | Listar transações | ✅ |
-| POST | `/api/transactions` | Criar transação | ✅ |
-| GET | `/api/transactions/{id}` | Buscar transação | ✅ |
-| PUT | `/api/transactions/{id}` | Atualizar transação | ✅ |
-| DELETE | `/api/transactions/{id}` | Deletar transação | ✅ |
-| GET | `/api/categories` | Listar categorias | ✅ |
-| POST | `/api/categories` | Criar categoria | ✅ |
-| PUT | `/api/categories/{id}` | Atualizar categoria | ✅ |
-| DELETE | `/api/categories/{id}` | Deletar categoria | ✅ |
-| GET | `/api/goals` | Listar metas | ✅ |
-| POST | `/api/goals` | Criar meta | ✅ |
-| GET | `/api/goals/{id}` | Buscar meta | ✅ |
-| PUT | `/api/goals/{id}` | Atualizar meta | ✅ |
-| POST | `/api/goals/{id}/progress` | Adicionar progresso | ✅ |
-| DELETE | `/api/goals/{id}` | Deletar meta | ✅ |
-| GET | `/api/recurring` | Listar recorrências | ✅ |
-| POST | `/api/recurring` | Criar recorrência | ✅ |
-| PUT | `/api/recurring/{id}` | Atualizar recorrência | ✅ |
-| DELETE | `/api/recurring/{id}` | Deletar recorrência | ✅ |
-| POST | `/api/recurring/generate` | Gerar transações | ✅ |
-| GET | `/api/notifications` | Listar notificações | ✅ |
-| POST | `/api/notifications` | Criar notificação | ✅ |
-| PUT | `/api/notifications/{id}/read` | Marcar como lida | ✅ |
-| DELETE | `/api/notifications/{id}` | Deletar notificação | ✅ |
-| GET | `/health` | Health check | ❌ |
-
-**Total: 31 endpoints**
-
----
-
-## 🚀 Como Testar
-
-### PowerShell (Windows)
-
-```powershell
-# 1. Registrar
-$register = @{
-    full_name = "Teste"
-    email = "teste@test.com"
-    password = "123456"
-    cpf = "123.456.789-00"
-    birth_date = "1990-01-01"
-    phone = "(11) 99999-9999"
-} | ConvertTo-Json
-
-$response = Invoke-WebRequest -Uri "http://localhost:8080/api/auth/register" `
-    -Method POST -ContentType "application/json" -Body $register
-
-$token = ($response.Content | ConvertFrom-Json).token
-
-# 2. Usar o token
-$headers = @{ "Authorization" = "Bearer $token" }
-
-# 3. Listar transações
-Invoke-WebRequest -Uri "http://localhost:8080/api/transactions" `
-    -Headers $headers
+**Resposta (200 OK):**
+```json
+{
+  "current_month": {
+    "income": 5500.00,
+    "expense": 2100.00,
+    "balance": 3400.00
+  },
+  "last_month": {
+    "income": 5000.00,
+    "expense": 2000.00,
+    "balance": 3000.00
+  }
+}
 ```
 
 ---
 
-## 📝 Códigos de Status HTTP
+#### 34. Obter Estatísticas por Categoria
+**GET** `/api/stats/categories`
 
-- **200 OK** - Sucesso
-- **201 Created** - Recurso criado
-- **400 Bad Request** - Dados inválidos
-- **401 Unauthorized** - Não autenticado
-- **403 Forbidden** - Sem permissão
-- **404 Not Found** - Recurso não encontrado
-- **409 Conflict** - Conflito (ex: email já existe)
-- **500 Internal Server Error** - Erro no servidor
+**Resposta (200 OK):**
+```json
+[
+  {
+    "category_name": "Alimentação",
+    "total_expense": 800.00
+  },
+  {
+    "category_name": "Transporte",
+    "total_expense": 400.00
+  }
+]
+```
 
+---
+
+#### 35. Obter Histórico de Fluxo de Caixa
+**GET** `/api/stats/flow`
+
+**Resposta (200 OK):**
+```json
+[
+  {
+    "date": "2025-01-01",
+    "income": 100.00,
+    "expense": 50.00
+  },
+  {
+    "date": "2025-01-02",
+    "income": 0.00,
+    "expense": 75.00
+  }
+]
+```

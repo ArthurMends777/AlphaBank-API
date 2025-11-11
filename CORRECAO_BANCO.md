@@ -1,44 +1,37 @@
-# 🔧 Correção do Banco de Dados
+# 🔧 Correção de Estrutura do Banco de Dados
 
-## ❌ Problema
+## ❌ Problema Identificado
 
-O código Rust espera as colunas:
-- `transaction_type` (na tabela transactions)
-- `category_type` (na tabela categories)
+O código do servidor em Rust foi desenvolvido esperando as seguintes colunas no banco de dados:
+- `transaction_type` (na tabela `transactions`)
+- `category_type` (na tabela `categories`)
 
-Mas o banco de dados tem:
-- `type` (em ambas as tabelas)
+No entanto, a estrutura atual do banco de dados utiliza a coluna genérica `type` em ambas as tabelas. Essa incompatibilidade de nomes impede o correto mapeamento dos dados pelo ORM do Rust.
 
-## ✅ Solução
+## ✅ Solução Aplicada: Colunas Virtuais
 
-Adicionar **colunas virtuais** (GENERATED) que funcionam como aliases. Isso mantém a coluna original `type` e cria as colunas que o Rust espera.
+A solução mais segura e recomendada é a adição de **colunas virtuais** (Generated Columns) que atuam como aliases. Essa abordagem permite que o código Rust utilize os nomes de coluna esperados (`transaction_type` e `category_type`) sem a necessidade de alterar ou renomear a coluna original `type`, garantindo a compatibilidade com qualquer código legado.
 
----
+### 1. Execução do Script de Correção
 
-## 📋 Passo a Passo
+Para aplicar a correção, utilize o script `fix_columns.sql`.
 
-### 1. Abrir MySQL Workbench
+**Opção A: Via Interface Gráfica (MySQL Workbench)**
 
-1. Conecte ao servidor MySQL
-2. Selecione o banco `alpha_bank`
+1.  Conecte-se ao servidor MySQL e selecione o banco de dados `alpha_bank`.
+2.  Vá em `File` → `Open SQL Script`.
+3.  Selecione o arquivo `fix_columns.sql`.
+4.  Execute o script.
 
-### 2. Executar Script de Correção
-
-**Opção A: Via Interface**
-
-1. File → Open SQL Script
-2. Selecione o arquivo `fix_columns.sql`
-3. Clique no raio ⚡ (Execute)
-
-**Opção B: Via Command Line**
+**Opção B: Via Linha de Comando**
 
 ```bash
 mysql -u root -p alpha_bank < fix_columns.sql
 ```
 
-### 3. Verificar
+### 2. Verificação da Estrutura
 
-Execute no MySQL Workbench:
+Após a execução, é possível verificar a nova estrutura das tabelas:
 
 ```sql
 -- Ver estrutura da tabela categories
@@ -52,68 +45,32 @@ SELECT id, name, type, category_type FROM categories LIMIT 3;
 SELECT id, description, type, transaction_type FROM transactions LIMIT 3;
 ```
 
-Você deve ver as novas colunas `category_type` e `transaction_type` com o mesmo valor de `type`.
+As colunas `category_type` e `transaction_type` devem estar presentes, refletindo o mesmo valor da coluna `type`.
 
----
+### 3. Sobre Colunas Virtuais
 
-## 🔍 O que são Colunas Virtuais?
+Colunas definidas como **GENERATED ALWAYS AS (expressão) VIRTUAL** possuem as seguintes vantagens:
 
-Colunas **GENERATED ALWAYS AS (expressão) VIRTUAL** são:
+*   **Eficiência de Espaço:** Não consomem espaço em disco, pois são calculadas em tempo real.
+*   **Sincronização:** Estão sempre sincronizadas com a coluna de origem.
+*   **Flexibilidade:** Podem ser indexadas e são compatíveis com versões recentes do MySQL (5.7+).
 
-✅ **Não ocupam espaço** em disco (calculadas em tempo real)  
-✅ **Sempre sincronizadas** com a coluna original  
-✅ **Podem ser indexadas** (se necessário)  
-✅ **Compatíveis** com MySQL 5.7+  
+### 4. Conclusão
 
-**Exemplo:**
-```sql
--- Quando você insere:
-INSERT INTO categories (name, type) VALUES ('Salário', 'income');
+Após a aplicação do script, o servidor Rust deve ser reiniciado para reconhecer as novas colunas virtuais e permitir o correto funcionamento dos endpoints.
 
--- Automaticamente category_type = 'income'
--- Sem precisar inserir manualmente!
+```bash
+cargo run
 ```
 
 ---
 
-## 🚀 Após a Correção
+## 🔄 Alternativa (Renomear Colunas)
 
-1. **Reinicie o servidor Rust:**
-   ```bash
-   cargo run
-   ```
-
-2. **Teste os endpoints:**
-   ```powershell
-   # Listar categorias (deve funcionar agora)
-   Invoke-WebRequest -Uri http://localhost:8080/api/categories `
-       -Headers @{"Authorization" = "Bearer SEU_TOKEN"}
-   ```
-
-3. **Criar transação:**
-   ```powershell
-   $body = @{
-       description = "Teste"
-       amount = 100.00
-       type = "income"
-       category_id = $null
-   } | ConvertTo-Json
-
-   Invoke-WebRequest -Uri http://localhost:8080/api/transactions `
-       -Method POST `
-       -Headers @{"Authorization" = "Bearer SEU_TOKEN"} `
-       -ContentType "application/json" `
-       -Body $body
-   ```
-
----
-
-## 🔄 Alternativa (Se Preferir)
-
-Se você quiser **renomear as colunas** ao invés de criar aliases:
+Caso seja estritamente necessário renomear as colunas permanentemente, o seguinte comando pode ser utilizado. **Atenção:** Esta ação pode quebrar queries antigas e não é a abordagem recomendada.
 
 ```sql
--- ATENÇÃO: Isso vai renomear permanentemente as colunas!
+-- ATENÇÃO: Isso renomeará permanentemente as colunas!
 
 ALTER TABLE categories 
 CHANGE COLUMN type category_type VARCHAR(20) NOT NULL 
@@ -123,15 +80,3 @@ ALTER TABLE transactions
 CHANGE COLUMN type transaction_type VARCHAR(20) NOT NULL 
 CHECK (transaction_type IN ('income', 'expense'));
 ```
-
-**Mas recomendo usar as colunas virtuais** (primeira opção) pois:
-- Mantém compatibilidade com código existente
-- Não quebra queries antigas
-- Mais seguro
-
----
-
-## ✅ Pronto!
-
-Após executar o script `fix_columns.sql`, os erros devem desaparecer! 🎉
-
