@@ -1,0 +1,781 @@
+{
+	"info": {
+		"_postman_id": "alpha-bank-api-collection",
+		"name": "Alpha Bank API",
+		"description": "API completa do Alpha Bank - Sistema de Controle Financeiro",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{auth_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "auth_token",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Health Check",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/health",
+							"host": ["{{base_url}}"],
+							"path": ["health"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.collectionVariables.set(\"auth_token\", jsonData.token);",
+									"    console.log(\"Token salvo: \" + jsonData.token);",
+									"    pm.test(\"Usuário registrado com sucesso\", function () {",
+									"        pm.expect(jsonData).to.have.property('token');",
+									"        pm.expect(jsonData).to.have.property('user');",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"full_name\": \"João da Silva\",\n  \"email\": \"joao.silva@email.com\",\n  \"password\": \"senha123456\",\n  \"cpf\": \"123.456.789-00\",\n  \"birth_date\": \"1995-03-15\",\n  \"phone\": \"(11) 98765-4321\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/register",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "register"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.collectionVariables.set(\"auth_token\", jsonData.token);",
+									"    console.log(\"Token salvo: \" + jsonData.token);",
+									"    pm.test(\"Login realizado com sucesso\", function () {",
+									"        pm.expect(jsonData).to.have.property('token');",
+									"        pm.expect(jsonData).to.have.property('user');",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"joao.silva@email.com\",\n  \"password\": \"senha123456\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "login"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Forgot Password",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"joao.silva@email.com\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/forgot-password",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "forgot-password"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"old_password\": \"senha123456\",\n  \"new_password\": \"novaSenha789\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/change-password",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "change-password"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Profile",
+			"item": [
+				{
+					"name": "Get Profile",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/me",
+							"host": ["{{base_url}}"],
+							"path": ["api", "me"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Profile",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"full_name\": \"João Silva Santos\",\n  \"phone\": \"(11) 99999-9999\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/me",
+							"host": ["{{base_url}}"],
+							"path": ["api", "me"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Transactions",
+			"item": [
+				{
+					"name": "Get All Transactions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/transactions",
+							"host": ["{{base_url}}"],
+							"path": ["api", "transactions"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Transaction by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/transactions/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "transactions", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "transaction-uuid-here"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Transaction (Income)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"description\": \"Salário\",\n  \"amount\": 5000.00,\n  \"transaction_type\": \"income\",\n  \"category_id\": null,\n  \"date\": \"2025-01-15\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/transactions",
+							"host": ["{{base_url}}"],
+							"path": ["api", "transactions"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Transaction (Expense)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"description\": \"Compra no supermercado\",\n  \"amount\": 150.50,\n  \"transaction_type\": \"expense\",\n  \"category_id\": null,\n  \"date\": \"2025-01-20\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/transactions",
+							"host": ["{{base_url}}"],
+							"path": ["api", "transactions"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Transaction",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"description\": \"Compra no mercado (atualizado)\",\n  \"amount\": 175.00\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/transactions/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "transactions", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "transaction-uuid-here"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Transaction",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/transactions/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "transactions", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "transaction-uuid-here"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Categories",
+			"item": [
+				{
+					"name": "Get All Categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/categories",
+							"host": ["{{base_url}}"],
+							"path": ["api", "categories"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Category",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Academia\",\n  \"icon\": \"💪\",\n  \"color\": \"#9b59b6\",\n  \"category_type\": \"expense\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/categories",
+							"host": ["{{base_url}}"],
+							"path": ["api", "categories"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Category",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Fitness\",\n  \"icon\": \"🏋️\",\n  \"color\": \"#8e44ad\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/categories/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "categories", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "category-uuid-here"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Category",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/categories/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "categories", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "category-uuid-here"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Goals",
+			"item": [
+				{
+					"name": "Get All Goals",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/goals",
+							"host": ["{{base_url}}"],
+							"path": ["api", "goals"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Goal by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/goals/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "goals", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "goal-uuid-here"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Goal",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Viagem para Europa\",\n  \"target_amount\": 10000.00,\n  \"deadline\": \"2025-12-31\",\n  \"icon\": \"✈️\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/goals",
+							"host": ["{{base_url}}"],
+							"path": ["api", "goals"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Goal",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Viagem para Europa (Atualizado)\",\n  \"target_amount\": 12000.00\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/goals/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "goals", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "goal-uuid-here"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Progress to Goal",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": 500.00\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/goals/:id/progress",
+							"host": ["{{base_url}}"],
+							"path": ["api", "goals", ":id", "progress"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "goal-uuid-here"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Goal",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/goals/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "goals", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "goal-uuid-here"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Recurring Transactions",
+			"item": [
+				{
+					"name": "Get All Recurring",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/recurring",
+							"host": ["{{base_url}}"],
+							"path": ["api", "recurring"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Recurring",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"description\": \"Netflix\",\n  \"amount\": 49.90,\n  \"transaction_type\": \"expense\",\n  \"category_id\": null,\n  \"frequency\": \"monthly\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/recurring",
+							"host": ["{{base_url}}"],
+							"path": ["api", "recurring"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Recurring",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"description\": \"Netflix Premium\",\n  \"amount\": 55.90,\n  \"active\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/recurring/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "recurring", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "recurring-uuid-here"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Recurring",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/recurring/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "recurring", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "recurring-uuid-here"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Generate Pending Transactions",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/recurring/generate",
+							"host": ["{{base_url}}"],
+							"path": ["api", "recurring", "generate"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Notifications",
+			"item": [
+				{
+					"name": "Get All Notifications",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/notifications",
+							"host": ["{{base_url}}"],
+							"path": ["api", "notifications"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Notification",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Lembrete\",\n  \"message\": \"Pagar conta de luz\",\n  \"notification_type\": \"warning\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/notifications",
+							"host": ["{{base_url}}"],
+							"path": ["api", "notifications"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mark as Read",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/notifications/:id/read",
+							"host": ["{{base_url}}"],
+							"path": ["api", "notifications", ":id", "read"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "notification-uuid-here"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Notification",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/notifications/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "notifications", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "notification-uuid-here"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
+
