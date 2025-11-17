@@ -40,7 +40,7 @@ alpha-bank-frontend-integrated/
     │   ├── settings.js
     │   └── utils.js
     └── assets/
-        ├── logo.jpg
+        ├── 45-135.webp
         └── (Arquivos SVG e imagens)
 ```
 
