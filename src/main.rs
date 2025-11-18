@@ -27,7 +27,7 @@ async fn main() -> std::io::Result<()> {
 
     log::info!("🚀 Starting Alpha Bank Server at http://{}:{}", host, port);
     log::info!("📊 Database connected successfully");
-    log::info!("🌐 Frontend available at http://{}:{}", host, port);
+    // log::info!("🌐 Frontend available at http://{}:{}", host, port);
     log::info!("🔌 API available at http://{}:{}/api", host, port);
 
     HttpServer::new(move || {
@@ -105,12 +105,12 @@ async fn main() -> std::io::Result<()> {
             // Health check
             .route("/health", web::get().to(|| async { HttpResponse::Ok().body("OK") }))
             // Serve static files (Frontend)
-            .service(fs::Files::new("/src", "./static/src").show_files_listing())
-            .service(
-                fs::Files::new("/", "./static")
-                    .index_file("index.html")
-                    .show_files_listing()
-            )
+            // .service(fs::Files::new("/src", "./static/src").show_files_listing())
+            // .service(
+            //     fs::Files::new("/", "./static")
+            //         .index_file("index.html")
+            //         .show_files_listing()
+            // )
     })
     .bind((host.as_str(), port))?
     .run()
