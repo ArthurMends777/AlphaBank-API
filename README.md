@@ -11,31 +11,9 @@ Esta é a API REST completa do sistema de controle financeiro Alpha Bank, desenv
 *   **JWT** - Autenticação via JSON Web Tokens.
 *   **Bcrypt** - Hash seguro para senhas.
 
-## 🔧 Configuração e Instalação
+## 🔧 Configuração
 
-### 1. Instalação do Rust
-
-Instale o Rust através do `rustup`: https://rustup.rs/
-
-Após a instalação, verifique as versões no terminal:
-```bash
-rustc --version
-cargo --version
-```
-
-### 2. Configuração do MySQL
-
-É necessário ter uma instância do MySQL 8.0+ em execução. O MySQL Workbench é recomendado para gerenciamento visual.
-
-**Criação do Banco de Dados:**
-
-Execute o arquivo `schema.sql` para criar o banco de dados `alpha_bank` e todas as tabelas necessárias.
-
-```sql
-mysql -u root -p < schema.sql
-```
-
-### 3. Configuração de Variáveis de Ambiente
+### 1. Configuração de Variáveis de Ambiente
 
 Copie o arquivo de exemplo para criar o arquivo de configuração local:
 
@@ -60,7 +38,7 @@ CORS_ORIGIN=http://localhost:3000
 RUST_LOG=info
 ```
 
-### 4. Compilação e Execução
+### 2. Compilação e Execução
 
 Para iniciar o servidor em modo de desenvolvimento:
 
