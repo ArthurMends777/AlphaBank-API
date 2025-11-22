@@ -242,9 +242,22 @@ pub async fn update_profile(
     let result = sqlx::query(&query).execute(pool.get_ref()).await;
 
     match result {
-        Ok(_) => HttpResponse::Ok().json(serde_json::json!({
-            "message": "Profile updated successfully"
-        })),
+        Ok(_) => {
+            let user = sqlx::query_as::<_, User>("SELECT * FROM users WHERE id = ?")
+                .bind(uid)
+                .fetch_one(pool.get_ref())
+                .await;
+
+            match user {
+                Ok(user) => HttpResponse::Ok().json(user),
+                Err(e) => {
+                    eprintln!("Database error: {}", e);
+                    HttpResponse::InternalServerError().json(serde_json::json!({
+                        "error": "Failed to retrieve updated user"
+                    }))
+                }
+            }
+        }
         Err(e) => {
             eprintln!("Database error: {}", e);
             HttpResponse::InternalServerError().json(serde_json::json!({
