@@ -141,6 +141,9 @@ pub async fn update(
     if !update_data.color.is_empty() {
         updates.push(format!("color = '{}'", update_data.color));
     }
+    if !update_data.category_type.is_empty() {
+        updates.push(format!("type = '{}'", update_data.category_type));
+    }
 
     if updates.is_empty() {
         return HttpResponse::BadRequest().json(serde_json::json!({
