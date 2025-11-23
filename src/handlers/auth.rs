@@ -125,7 +125,7 @@ pub async fn login(
 ) -> impl Responder {
     if let Err(errors) = credentials.validate() {
         return HttpResponse::BadRequest().json(serde_json::json!({
-            "error": "Validation failed",
+            "error": "Email ou senha inválidos",
             "details": errors.to_string()
         }));
     }
